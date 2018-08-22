@@ -1,0 +1,39 @@
+#Class exersice 1
+
+# Natalia Maksymchuk08/22/2018, This program does the KM analysis and plot
+
+# Load the dataset - survival package, which has function for KM analysis  
+
+require(datasets) # Loads datasets
+require(survival)
+
+#check your dataset
+head(lung)
+
+#Make a object survData
+survData <- lung # data object
+
+# Use package survival
+survObj <- Surv(time=survData$time, event=survData$status==2, type='right')
+# Surv is a function
+# Explain everything
+# $ - Select column
+# == pick something
+
+dim(survData) # dimention of dataset
+
+# Fit your plot to the intercept
+fit <- survfit(survObj ~ 1) # fitting our data with
+
+# plot the fit
+plot(fit, main="KM plot fot lung cancer data", xlab="Time in days", ylab="Percent Survival") # plotting of fit
+
+# Fit your plot to sexes
+fit <- survfit(survObj ~ survData$sex==1) # fit data to object
+plot(fit, main="KM plot fot lung cancer data in males and females", xlab="Time in days", ylab="Percent Survival", col=c(1,2))
+
+# assigning labels
+legend('topright', c("Male","Female"),lty=1, col=c(1,2))
+
+cox <- coxph(survObj ~ survData$sex==1) #cox regression when we use more than 2 variables
+summary(cox)
